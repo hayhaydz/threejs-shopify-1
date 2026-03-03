@@ -41,7 +41,7 @@ export default function Home() {
 
       {/* Instructions */}
       <div className="pointer-events-none fixed bottom-4 left-1/2 -translate-x-1/2 rounded-lg bg-black/50 px-4 py-2 text-sm text-white">
-        Drag products into the basket (coming soon: physics + basket!)
+        🎮 Drag products and drop them in the basket to add to cart!
       </div>
     </main>
   );
