@@ -1,22 +1,14 @@
 'use client';
 
-import { useRef, forwardRef } from 'react';
-import * as THREE from 'three';
+import { forwardRef } from 'react';
+import { RigidBody, RapierRigidBody } from '@react-three/rapier';
 import { ShopifyProduct } from '@/types/shopify';
 
 // Generate consistent colors based on product ID
 function getProductColor(id: string): string {
   const colors = [
-    '#FF6B6B', // Red
-    '#4ECDC4', // Teal
-    '#45B7D1', // Blue
-    '#96CEB4', // Green
-    '#FFEAA7', // Yellow
-    '#DDA0DD', // Plum
-    '#98D8C8', // Mint
-    '#F7DC6F', // Gold
-    '#BB8FCE', // Purple
-    '#85C1E9', // Light Blue
+    '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
+    '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9',
   ];
 
   const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
@@ -26,29 +18,32 @@ function getProductColor(id: string): string {
 interface ProductProps {
   product: ShopifyProduct;
   position: [number, number, number];
+  isDragging?: boolean;
 }
 
-export const Product = forwardRef<THREE.Mesh, ProductProps>(
-  function Product({ product, position }, ref) {
+export const Product = forwardRef<RapierRigidBody, ProductProps>(
+  function Product({ product, position, isDragging = false }, ref) {
     const variant = product.variants.edges[0]?.node;
     const color = getProductColor(product.id);
 
     return (
-      <mesh
+      <RigidBody
         ref={ref}
         position={position}
-        castShadow
+        type={isDragging ? 'kinematicPosition' : 'dynamic'}
         userData={{
           shopifyId: variant?.id,
           productId: product.id,
           title: product.title,
         }}
       >
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
+        <mesh castShadow>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial color={color} />
+        </mesh>
+      </RigidBody>
     );
   }
 );
 
-export type ProductHandle = THREE.Mesh;
+export type ProductHandle = RapierRigidBody;
