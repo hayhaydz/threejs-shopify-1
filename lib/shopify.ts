@@ -8,26 +8,34 @@ import type {
 	ShopifyProduct,
 } from "@/types/shopify";
 
-const STORE_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN;
-const STOREFRONT_ACCESS_TOKEN = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+function getShopifyConfig() {
+	const storeDomain = process.env.SHOPIFY_STORE_DOMAIN;
+	const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 
-if (!STORE_DOMAIN || !STOREFRONT_ACCESS_TOKEN) {
-	throw new Error(
-		"Missing Shopify credentials. Set SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_ACCESS_TOKEN in .env.local",
-	);
+	if (!storeDomain || !storefrontAccessToken) {
+		throw new Error(
+			"Missing Shopify credentials. Set SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_ACCESS_TOKEN in .env.local",
+		);
+	}
+
+	return {
+		storeDomain,
+		storefrontAccessToken,
+		graphqlUrl: `https://${storeDomain}/api/2024-01/graphql.json`,
+	};
 }
-
-const SHOPIFY_GRAPHQL_URL = `https://${STORE_DOMAIN}/api/2024-01/graphql.json`;
 
 async function shopifyFetch<T>(
 	query: string,
 	variables: Record<string, unknown> = {},
 ): Promise<T> {
-	const response = await fetch(SHOPIFY_GRAPHQL_URL, {
+	const { graphqlUrl, storefrontAccessToken } = getShopifyConfig();
+
+	const response = await fetch(graphqlUrl, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
-			"X-Shopify-Storefront-Access-Token": STOREFRONT_ACCESS_TOKEN,
+			"X-Shopify-Storefront-Access-Token": storefrontAccessToken,
 		},
 		body: JSON.stringify({ query, variables }),
 	});
