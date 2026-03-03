@@ -21,7 +21,7 @@ function getShopifyConfig() {
 	return {
 		storeDomain,
 		storefrontAccessToken,
-		graphqlUrl: `https://${storeDomain}/api/2024-01/graphql.json`,
+		graphqlUrl: `https://${storeDomain}/api/2026-01/graphql.json`,
 	};
 }
 
