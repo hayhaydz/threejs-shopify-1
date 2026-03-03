@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, DragControls } from '@react-three/drei';
 import { useCart } from '@/hooks/useCart';
 import { Product } from './Product';
 import { Floor } from './Floor';
@@ -52,14 +52,23 @@ export function Scene() {
         maxDistance={15}
       />
 
-      {/* Products */}
-      {products.map((product, index) => (
-        <Product
-          key={product.id}
-          product={product}
-          position={positions[index] || [0, 0, 0]}
-        />
-      ))}
+      {/* Draggable Products */}
+      <DragControls
+        onDragStart={() => {
+          document.body.style.cursor = 'grabbing';
+        }}
+        onDragEnd={() => {
+          document.body.style.cursor = 'default';
+        }}
+      >
+        {products.map((product, index) => (
+          <Product
+            key={product.id}
+            product={product}
+            position={positions[index] || [0, 0, 0]}
+          />
+        ))}
+      </DragControls>
 
       {/* Floor */}
       <Floor />
