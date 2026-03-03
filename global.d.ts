@@ -1,4 +1,6 @@
-import { ThreeElements } from "@react-three/fiber";
+import type { ThreeElements } from "@react-three/fiber";
+
+declare module "*.css";
 
 declare global {
 	namespace JSX {

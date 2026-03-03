@@ -6,8 +6,9 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"ignoreUnknown": false
-	},
+		"ignoreUnknown": false,
+		"ignore": ["docs/**"]
+	}.
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab"
