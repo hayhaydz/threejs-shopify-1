@@ -2,6 +2,7 @@
 
 import { forwardRef } from 'react';
 import { RigidBody, RapierRigidBody } from '@react-three/rapier';
+import { Text, Float } from '@react-three/drei';
 import { ShopifyProduct } from '@/types/shopify';
 
 // Generate consistent colors based on product ID
@@ -41,6 +42,19 @@ export const Product = forwardRef<RapierRigidBody, ProductProps>(
           <boxGeometry args={[1, 1, 1]} />
           <meshStandardMaterial color={color} />
         </mesh>
+
+        {/* Floating label */}
+        <Float speed={2} floatIntensity={0.5}>
+          <Text
+            position={[0, 1.2, 0]}
+            fontSize={0.3}
+            color="white"
+            anchorX="center"
+            anchorY="middle"
+          >
+            {product.title.slice(0, 15)}
+          </Text>
+        </Float>
       </RigidBody>
     );
   }
