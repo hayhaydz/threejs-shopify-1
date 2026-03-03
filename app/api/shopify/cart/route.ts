@@ -1,10 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import {
+	addToCart,
 	createCart,
 	getCart,
-	addToCart,
 	removeFromCart,
 } from "@/lib/shopify-server";
+import type { ShopifyCart } from "@/types/shopify";
 
 export async function POST() {
 	try {
@@ -12,7 +13,9 @@ export async function POST() {
 		return NextResponse.json({ cart });
 	} catch (error) {
 		return NextResponse.json(
-			{ error: error instanceof Error ? error.message : "Failed to create cart" },
+			{
+				error: error instanceof Error ? error.message : "Failed to create cart",
+			},
 			{ status: 500 },
 		);
 	}
@@ -31,7 +34,9 @@ export async function GET(request: NextRequest) {
 		return NextResponse.json({ cart });
 	} catch (error) {
 		return NextResponse.json(
-			{ error: error instanceof Error ? error.message : "Failed to fetch cart" },
+			{
+				error: error instanceof Error ? error.message : "Failed to fetch cart",
+			},
 			{ status: 500 },
 		);
 	}
@@ -42,7 +47,7 @@ export async function PUT(request: NextRequest) {
 	const { action, cartId, variantId, lineId, quantity } = body;
 
 	try {
-		let cart;
+		let cart: ShopifyCart;
 		if (action === "add" && cartId && variantId) {
 			cart = await addToCart(cartId, variantId, quantity ?? 1);
 		} else if (action === "remove" && cartId && lineId) {
@@ -53,7 +58,9 @@ export async function PUT(request: NextRequest) {
 		return NextResponse.json({ cart });
 	} catch (error) {
 		return NextResponse.json(
-			{ error: error instanceof Error ? error.message : "Cart operation failed" },
+			{
+				error: error instanceof Error ? error.message : "Cart operation failed",
+			},
 			{ status: 500 },
 		);
 	}

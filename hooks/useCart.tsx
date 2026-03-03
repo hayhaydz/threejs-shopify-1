@@ -47,7 +47,9 @@ async function fetchCreateCart(): Promise<ShopifyCart> {
 }
 
 async function fetchGetCart(cartId: string): Promise<ShopifyCart | null> {
-	const response = await fetch(`/api/shopify/cart?cartId=${encodeURIComponent(cartId)}`);
+	const response = await fetch(
+		`/api/shopify/cart?cartId=${encodeURIComponent(cartId)}`,
+	);
 	if (!response.ok) {
 		const error = await response.json();
 		throw new Error(error.error || "Failed to fetch cart");
