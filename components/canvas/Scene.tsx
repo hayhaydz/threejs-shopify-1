@@ -2,8 +2,10 @@
 
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, DragControls } from '@react-three/drei';
+import { Physics } from '@react-three/rapier';
 import { useCart } from '@/hooks/useCart';
 import { Product } from './Product';
+import { Basket } from './Basket';
 import { Floor } from './Floor';
 
 // Calculate grid positions for products
@@ -17,7 +19,7 @@ function calculateGridPositions(count: number): [number, number, number][] {
     const col = i % columns;
     const x = (col - (columns - 1) / 2) * spacing;
     const z = row * spacing - 2;
-    positions.push([x, 0, z]);
+    positions.push([x, 1, z]);  // y=1 so products fall from above
   }
 
   return positions;
@@ -30,7 +32,7 @@ export function Scene() {
   return (
     <Canvas
       shadows
-      camera={{ position: [0, 5, 8], fov: 50 }}
+      camera={{ position: [0, 5, 12], fov: 50 }}
       style={{ background: '#1a1a2e' }}
     >
       {/* Lighting */}
@@ -70,8 +72,14 @@ export function Scene() {
         ))}
       </DragControls>
 
-      {/* Floor */}
-      <Floor />
+      {/* Physics world */}
+      <Physics debug={false}>
+        {/* Basket (physics-enabled) */}
+        <Basket />
+
+        {/* Floor (physics-enabled) */}
+        <Floor />
+      </Physics>
     </Canvas>
   );
 }
