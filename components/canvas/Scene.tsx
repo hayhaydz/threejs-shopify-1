@@ -1,6 +1,6 @@
 "use client";
 
-import { DragControls, OrbitControls } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { useCart } from "@/hooks/useCart";
@@ -54,15 +54,9 @@ export function Scene() {
 				maxDistance={15}
 			/>
 
-			{/* Draggable Products */}
-			<DragControls
-				onDragStart={() => {
-					document.body.style.cursor = "grabbing";
-				}}
-				onDragEnd={() => {
-					document.body.style.cursor = "default";
-				}}
-			>
+			{/* Physics world - all RigidBody components must be inside */}
+			<Physics debug={false}>
+				{/* Products (physics-enabled) */}
 				{products.map((product, index) => (
 					<Product
 						key={product.id}
@@ -70,10 +64,7 @@ export function Scene() {
 						position={positions[index] || [0, 0, 0]}
 					/>
 				))}
-			</DragControls>
 
-			{/* Physics world */}
-			<Physics debug={false}>
 				{/* Basket (physics-enabled) */}
 				<Basket />
 
