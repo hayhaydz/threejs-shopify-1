@@ -1,3 +1,5 @@
+import "server-only";
+
 import type {
 	AddToCartResponse,
 	CartResponse,
@@ -8,20 +10,20 @@ import type {
 	ShopifyProduct,
 } from "@/types/shopify";
 
-function getShopifyConfig() {
-	const storeDomain = process.env.SHOPIFY_STORE_DOMAIN;
-	const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+const STORE_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN;
+const STOREFRONT_ACCESS_TOKEN = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 
-	if (!storeDomain || !storefrontAccessToken) {
+function getShopifyConfig() {
+	if (!STORE_DOMAIN || !STOREFRONT_ACCESS_TOKEN) {
 		throw new Error(
 			"Missing Shopify credentials. Set SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_ACCESS_TOKEN in .env.local",
 		);
 	}
 
 	return {
-		storeDomain,
-		storefrontAccessToken,
-		graphqlUrl: `https://${storeDomain}/api/2026-01/graphql.json`,
+		storeDomain: STORE_DOMAIN,
+		storefrontAccessToken: STOREFRONT_ACCESS_TOKEN,
+		graphqlUrl: `https://${STORE_DOMAIN}/api/2026-01/graphql.json`,
 	};
 }
 
@@ -125,7 +127,6 @@ const GET_CART_QUERY = `
   }
 `;
 
-// GraphQL Mutations
 const CREATE_CART_MUTATION = `
   mutation CreateCart {
     cartCreate {
